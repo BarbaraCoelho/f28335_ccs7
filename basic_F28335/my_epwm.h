@@ -2,7 +2,7 @@
  * my_epwm.h
  *
  *  Created on: Jul 18, 2017
- *      Author: joaoantoniocardoso
+ *  Author: joaoantoniocardoso
  *
  *  Description: 
  *
@@ -37,5 +37,7 @@ void InitEPwm6(void);
 #define epwm4_set_ph(ph) EPwm4Regs.TBPHS.half.TBPHS = ph
 #define epwm5_set_ph(ph) EPwm5Regs.TBPHS.half.TBPHS = ph
 #define epwm6_set_ph(ph) EPwm6Regs.TBPHS.half.TBPHS = ph
+
+__interrupt void epwm1_timer_isr(void);
 
 #endif /* MY_EPWM_H_ */

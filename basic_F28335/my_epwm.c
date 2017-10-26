@@ -4,7 +4,7 @@
  *  Created on: Jul 18, 2017
  *      Author: joaoantoniocardoso
  *
- *  Description: 
+ *  Description:
  *
  *  Reference: http://www.ti.com/lit/ug/sprug04a/sprug04a.pdf
  *
@@ -26,6 +26,16 @@ void my_epwm_init(void)
     InitEPwm4();
     InitEPwm5();
     InitEPwm6();
+
+    // Enable CPU INT3 which is connected to EPWM1-6 INT:
+    IER |= M_INT3;
+
+    // Enable EPWM INTn in the PIE: Group 3 interrupt 1-6
+    PieCtrlRegs.PIEIER3.bit.INTx1 = 1;
+
+    // Enable global Interrupts and higher priority real-time debug events:
+    EINT;   // Enable Global interrupt INTM
+    ERTM;   // Enable Global realtime interrupt DBGM
 
     MyInitEPwmGpio();
 
@@ -75,10 +85,20 @@ void MyInitEPwmGpio(void)
  * half.CMPA = DutyCycle x TBPRD
  * Este EPWM1 estÃ¡ configurado como master para o sinal de
  * sincronismo
+ * Foi configurado uma interrupção no primeiro evento de quando o
+ * comparador chega no topo.
  *
  */
 void InitEPwm1(void)
 {
+    EALLOW;
+    PieVectTable.EPWM1_INT = &epwm1_timer_isr;      // points to my isr declaration
+    EDIS;
+
+    EALLOW;
+    SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 0;      // Stop all the TB clocks
+    EDIS;
+
     EPwm1Regs.TBPRD = 1500;                         // Period = 2 x 1500 TBCLK counts
     EPwm1Regs.CMPA.half.CMPA = 0;                   // Init with duty cycle = 0
     EPwm1Regs.TBPHS.all = 0;                        // Set Phase register to zero
@@ -89,17 +109,28 @@ void InitEPwm1(void)
     EPwm1Regs.TBCTL.bit.SYNCOSEL = TB_CTR_ZERO;     // Sync down-stream module
     EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;        // TBCLK = SYSCLKOUT
     EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV1;
+    EPwm1Regs.ETSEL.bit.INTSEL = ET_CTR_PRD;        // trigger when counter equals to top
+    EPwm1Regs.ETSEL.bit.INTEN = 1;                  // EPwm1_int enable
+    EPwm1Regs.ETPS.bit.INTPRD = ET_1ST;             // generate an interrupt on the first event
+
     EPwm1Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
     EPwm1Regs.CMPCTL.bit.SHDWBMODE = CC_SHADOW;
     EPwm1Regs.CMPCTL.bit.LOADAMODE = CC_CTR_ZERO;   // load on CTR = Zero
     EPwm1Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO;   // load on CTR = Zero
-    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;
-    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;
+    EPwm1Regs.AQCTLA.bit.CAU = AQ_CLEAR;            // clear when compare ascending
+    EPwm1Regs.AQCTLA.bit.CAD = AQ_SET;              // set when compare descending
     // Deadband config:
     //EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;  // enable Dead-band module
     //EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC;       // Active Hi complementary
     //EPwm1Regs.DBFED = 50; // FED = 50 TBCLKs
     //EPwm1Regs.DBRED = 50; // RED = 50 TBCLKs
+    // Interrupt config:
+
+    EALLOW;
+    SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;          // stars all the timers synced
+    EDIS;
+
+    asm ("      ESTOP0");
 }
 
 /**
@@ -239,4 +270,19 @@ void InitEPwm6(void)
     EPwm6Regs.CMPCTL.bit.LOADBMODE = CC_CTR_ZERO;   // load on CTR = Zero
     EPwm6Regs.AQCTLA.bit.CAU = AQ_CLEAR;
     EPwm6Regs.AQCTLA.bit.CAD = AQ_SET;
+}
+
+volatile Uint32 AAAAAAA = 0;
+
+/**
+ * @brief
+ */
+__interrupt void epwm1_timer_isr(void)              // EPWM-1
+{
+
+    AAAAAAA++;
+
+    EPwm1Regs.ETCLR.bit.INT = 1;
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+
 }
