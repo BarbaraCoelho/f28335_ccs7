@@ -28,7 +28,7 @@
 		<link>
 			<name>DSP2833x_ADC_cal.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_common/source/DSP2833x_ADC_cal.asm</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_common/source/DSP2833x_ADC_cal.asm</locationURI>
 		</link>
 		<link>
 			<name>DSP2833x_Adc.c</name>
@@ -38,7 +38,7 @@
 		<link>
 			<name>DSP2833x_CodeStartBranch.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_common/source/DSP2833x_CodeStartBranch.asm</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_common/source/DSP2833x_CodeStartBranch.asm</locationURI>
 		</link>
 		<link>
 			<name>DSP2833x_CpuTimers.c</name>
@@ -78,12 +78,12 @@
 		<link>
 			<name>DSP2833x_GlobalVariableDefs.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_headers/source/DSP2833x_GlobalVariableDefs.c</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_headers/source/DSP2833x_GlobalVariableDefs.c</locationURI>
 		</link>
 		<link>
 			<name>DSP2833x_Gpio.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_common/source/DSP2833x_Gpio.c</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_common/source/DSP2833x_Gpio.c</locationURI>
 		</link>
 		<link>
 			<name>DSP2833x_I2C.c</name>
@@ -133,7 +133,7 @@
 		<link>
 			<name>DSP2833x_SysCtrl.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_common/source/DSP2833x_SysCtrl.c</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_common/source/DSP2833x_SysCtrl.c</locationURI>
 		</link>
 		<link>
 			<name>DSP2833x_Xintf.c</name>
@@ -143,7 +143,13 @@
 		<link>
 			<name>DSP2833x_usDelay.asm</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/f2833x/v142/DSP2833x_common/source/DSP2833x_usDelay.asm</locationURI>
+			<locationURI>PARENT-1-ORIGINAL_PROJECT_ROOT/f2833x/v142/DSP2833x_common/source/DSP2833x_usDelay.asm</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>ORIGINAL_PROJECT_ROOT</name>
+			<value>file:/C:/Users/BARBARA/Desktop/f28335_ccs7-raul_test_pwm_adc_serial/basic_F28335</value>
+		</variable>
+	</variableList>
 </projectDescription>
