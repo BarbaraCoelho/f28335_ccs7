@@ -13,6 +13,10 @@
 
 #include "DSP28x_Project.h"
 
+extern volatile float sinal_modulante[417];
+extern volatile Uint32 index_sinal_modulante;
+extern volatile Uint32 dt;
+
 void my_epwm_init(void);
 
 void MyInitEPwmGpio(void);

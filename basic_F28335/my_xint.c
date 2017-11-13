@@ -3,55 +3,75 @@
  *
  *  Created on: 25 de out de 2017
  *      Author: BARBARA
+ *
+ *  Description:
+ *
+ *  Reference: http://www.ti.com/lit/ug/sprufb0d/sprufb0d.pdf
+ *
  */
 
 #include "my_xint.h"
 
 /**
- * @brief
+ * @brief inicializa os XINTn
  */
 void my_xint_init(void)
 {
-    // Interrupts that are used in this example are re-mapped to
-    // ISR functions found within this file.
     EALLOW;  // This is needed to write to EALLOW protected registers
-    PieVectTable.XINT1 = &xint1_isr;
+    //PieVectTable.XINT1 = &xint1_isr;    // XINT1
+    PieVectTable.XINT3 = &xint3_isr;    // XINT3
     EDIS;   // This is needed to disable write to EALLOW protected registers
 
-   // Enable Xint1 in the PIE: Group 1 interrupt 4
-   // Enable int1 which is connected to WAKEINT:
+
     PieCtrlRegs.PIECTRL.bit.ENPIE = 1;          // Enable the PIE block
-    PieCtrlRegs.PIEIER1.bit.INTx4 = 1;          // Enable PIE Gropu 1 INT4
-    IER |= M_INT1;                              // Enable CPU int1
+    // Enable Xint1 in the PIE: Group 1 interrupt 4
+    //PieCtrlRegs.PIEIER1.bit.INTx4 = 1;          // Enable PIE Gropu 1 INTx4 (XINT1)
+    // Enable Xint1 in the PIE: Group 12 interrupt 1
+    PieCtrlRegs.PIEIER12.bit.INTx1 = 1;         // Enable PIE Gropu 12 INTx1 (XINT3)
+    //PieCtrlRegs.PIEIER1.bit.INTx5 = 1;          // Enable PIE Gropu 1 INTx5 (XINT2)
+    //IER |= M_INT1;                              // Enable CPU int1
+    IER |= M_INT12;                             // Enable CPU int12
     EINT;                                       // Enable Global Interrupts
 
-    // GPIO0 is XINT1
     EALLOW;
-    GpioIntRegs.GPIOXINT1SEL.bit.GPIOSEL = 0;   // Xint1 is GPIO0
+    // GPIO 33 are input
+    GpioCtrlRegs.GPBMUX1.bit.GPIO33 = 0;        // GPIO
+    GpioCtrlRegs.GPBDIR.bit.GPIO33 = 0;         // INPUT - SINC1
+    GpioCtrlRegs.GPBQSEL1.bit.GPIO33 = 0;       // Xint Synch to SYSCLKOUT only
+
+    // GPIO 01 are input
+    //GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 0;         // GPIO
+    //GpioCtrlRegs.GPADIR.bit.GPIO1 = 0;          // input
+    //GpioCtrlRegs.GPAQSEL1.bit.GPIO1 = 0;        // Xint Synch to SYSCLKOUT only
     EDIS;
 
-    // Configure XINT1
-    XIntruptRegs.XINT1CR.bit.POLARITY = 0;      // Falling edge interrupt
-
-    // Enable XINT1
-    XIntruptRegs.XINT1CR.bit.ENABLE = 1;        // Enable Xint1
-
-    // GPIO34 will go low inside each interrupt.  Monitor this on a scope
     EALLOW;
-    GpioCtrlRegs.GPBMUX1.bit.GPIO34 = 0;        // GPIO
-    GpioCtrlRegs.GPBDIR.bit.GPIO34 = 1;         // output
+    // GPIO1 is XINT1
+    //GpioIntRegs.GPIOXINT1SEL.bit.GPIOSEL = 1;   // Xint1 is GPIO1
+    // GPIO33 is XINT3
+    GpioIntRegs.GPIOXINT3SEL.bit.GPIOSEL = 1;   // Xint3 is GPIO33
     EDIS;
 
+    // Configure XINT1 and XINT3
+    //XIntruptRegs.XINT1CR.bit.POLARITY = 1;      // Rising edge interrupt
+    XIntruptRegs.XINT3CR.bit.POLARITY = 1;      // Rising edge interrupt
+
+    // Enable XINT1 and XINT3
+    //XIntruptRegs.XINT1CR.bit.ENABLE = 1;        // Enable Xint1
+    XIntruptRegs.XINT3CR.bit.ENABLE = 1;        // Enable Xint3
 }
 
 /**
- * @brief
+ * @brief interrupção XINT3
  */
-__interrupt void xint1_isr(void)
+__interrupt void xint3_isr(void)
 {
-    GpioDataRegs.GPBCLEAR.all = 0x4;   // GPIO34 is low
-    Xint1Count++;
+
+    index_sinal_modulante = 0;
 
     // Acknowledge this interrupt to get more from group 1
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+    //PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+    // Acknowledge this interrupt to get more from group 12
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP12;
+
 }

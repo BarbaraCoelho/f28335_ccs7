@@ -11,10 +11,11 @@
 
 #include "DSP28x_Project.h"
 
-volatile Uint32 Xint1Count;
+extern volatile Uint32 index_sinal_modulante;
 
 void my_xint_init(void);
 
-__interrupt void xint1_isr(void);
+//__interrupt void xint1_isr(void);
+__interrupt void xint3_isr(void);
 
 #endif /* MY_XINT_C_ */
