@@ -99,7 +99,7 @@ void InitEPwm1(void)
     SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 0;      // Stop all the TB clocks
     EDIS;
 
-    EPwm1Regs.TBPRD = 3000;//1500;                         // Period = 2 x 1500 TBCLK counts
+    EPwm1Regs.TBPRD = 1500;                         // Period = 2 x 1500 TBCLK counts
     EPwm1Regs.CMPA.half.CMPA = 0;                   // Init with duty cycle = 0
     EPwm1Regs.TBPHS.all = 0;                        // Set Phase register to zero
     EPwm1Regs.TBCTR = 0;                            // clear TB counter
@@ -277,20 +277,23 @@ void InitEPwm6(void)
  */
 __interrupt void epwm1_timer_isr(void)              // EPWM-1
 {
-    if (index_sinal_modulante <= 208)
-    {
-        dt = (0.5 + (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
+    if(Calcula_dt == 1){
+        if(++index_sinal_modulante >= 420) index_sinal_modulante = 0;  // 420 (25 kHz)    837 (50 kHz)
+        if (index_sinal_modulante <= 208)                              // 208 (25 kHz)    418 (50 kHz)
+        {
+            dt = (0.5 + (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
+        }
+        else
+        {
+            dt = (0.5 - (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
+        }
+        Calcula_dt = 0;
     }
-    else
-    {
-        dt = (0.5 - (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
+    else{
+        Calcula_dt = 1;
     }
     epwm1_set_dt(dt);
 
-
-    if(index_sinal_modulante++ >= 417) index_sinal_modulante = 0;
-
     EPwm1Regs.ETCLR.bit.INT = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
-
 }

@@ -13,9 +13,10 @@
 
 #include "DSP28x_Project.h"
 
-extern volatile float sinal_modulante[417];
+extern volatile float sinal_modulante[420];             // 420 (25 kHz)    837 (50 kHz)
 extern volatile Uint32 index_sinal_modulante;
 extern volatile Uint32 dt;
+extern volatile Uint32 Calcula_dt;
 
 void my_epwm_init(void);
 
