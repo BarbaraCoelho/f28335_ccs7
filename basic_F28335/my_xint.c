@@ -26,18 +26,23 @@ void my_xint_init(void)
     PieCtrlRegs.PIECTRL.bit.ENPIE = 1;          // Enable the PIE block
     // Enable Xint1 in the PIE: Group 1 interrupt 4
     //PieCtrlRegs.PIEIER1.bit.INTx4 = 1;          // Enable PIE Gropu 1 INTx4 (XINT1)
+    IER |= M_INT12;                             // Enable CPU int12
     // Enable Xint1 in the PIE: Group 12 interrupt 1
     PieCtrlRegs.PIEIER12.bit.INTx1 = 1;         // Enable PIE Gropu 12 INTx1 (XINT3)
     //PieCtrlRegs.PIEIER1.bit.INTx5 = 1;          // Enable PIE Gropu 1 INTx5 (XINT2)
     //IER |= M_INT1;                              // Enable CPU int1
-    IER |= M_INT12;                             // Enable CPU int12
-    EINT;                                       // Enable Global Interrupts
+   EINT;                                       // Enable Global Interrupts
 
     EALLOW;
     // GPIO 33 are input
     GpioCtrlRegs.GPBMUX1.bit.GPIO33 = 0;        // GPIO
     GpioCtrlRegs.GPBDIR.bit.GPIO33 = 0;         // INPUT - SINC1
     GpioCtrlRegs.GPBQSEL1.bit.GPIO33 = 0;       // Xint Synch to SYSCLKOUT only
+
+    // old sinc.c
+//    GpioCtrlRegs.GPADIR.bit.GPIO29 = 0;     //sinc3
+//    GpioCtrlRegs.GPADIR.bit.GPIO31 = 0;     //sinc2
+//    GpioCtrlRegs.GPBDIR.bit.GPIO33 = 0;     //sinc1
 
     // GPIO 01 are input
     //GpioCtrlRegs.GPAMUX1.bit.GPIO1 = 0;         // GPIO
@@ -66,9 +71,11 @@ void my_xint_init(void)
  */
 __interrupt void xint3_isr(void)
 {
-
-    index_sinal_modulante = 0;
-
+    // Só zera o index se for maior que 75% da tabela
+    if(index_sinal_modulante >= 312){
+        index_sinal_modulante = 0;
+        index_sinal_modulante2++;
+    }
     // Acknowledge this interrupt to get more from group 1
     //PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
     // Acknowledge this interrupt to get more from group 12

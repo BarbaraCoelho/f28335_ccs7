@@ -101,8 +101,10 @@ void my_scia_init(void)
     // BRR = 121 -> baud = 38400
     // BRR = 243 -> baud = 19200
     // BRB = 487 -> baud = 9600
-    SciaRegs.SCIHBAUD = 487 >> 8;           // Highbyte
-    SciaRegs.SCILBAUD = 487 & 0xFF;         // Lowbyte
+    // BRB = 976 -> baud = 4800
+    // BRB = 1952 -> baud = 2400
+    SciaRegs.SCIHBAUD = 7808 >> 8;           // Highbyte
+    SciaRegs.SCILBAUD = 7808 & 0xFF;         // Lowbyte
 
     //
     SciaRegs.SCICTL1.bit.RXERRINTENA = 0;   // Receive error interrupt disabled

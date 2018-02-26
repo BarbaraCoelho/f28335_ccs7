@@ -11,7 +11,7 @@
 #ifndef MY_BUTTONS_H_
 #define MY_BUTTONS_H_
 
-#include "DSP28x_Project.h"
+#include "main.h"
 
 #define botao1       GpioDataRegs.GPADAT.bit.GPIO26
 #define botao2       GpioDataRegs.GPADAT.bit.GPIO16

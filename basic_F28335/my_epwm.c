@@ -12,6 +12,9 @@
 
 #include "my_epwm.h"
 
+volatile Uint32 interruptionEpwm = 0;
+volatile Uint32 epwm1_timer_isr_collision = 0;
+
 /**
  * @brief Inicializa os pwms.
  * Uma observação importante é que os duty cycles são inicializados em zero e
@@ -277,23 +280,24 @@ void InitEPwm6(void)
  */
 __interrupt void epwm1_timer_isr(void)              // EPWM-1
 {
-    if(Calcula_dt == 1){
-        if(++index_sinal_modulante >= 420) index_sinal_modulante = 0;  // 420 (25 kHz)    837 (50 kHz)
-        if (index_sinal_modulante <= 208)                              // 208 (25 kHz)    418 (50 kHz)
-        {
-            dt = (0.5 + (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
+    static Uint32 clk_div = 0;
+    static Uint32 epwm1_timer_isr_counter = 0;
+
+    epwm1_timer_isr_counter++;
+
+    // verifies if the ctrl loop took to long to finish its loop
+    if(interruptionEpwm){
+        if(clk_div++){
+            epwm1_timer_isr_collision++;
+            clk_div = 0;
         }
-        else
-        {
-            dt = (0.5 - (sinal_modulante[index_sinal_modulante])/2)*EPwm1Regs.TBPRD;
-        }
-        Calcula_dt = 0;
     }
-    else{
-        Calcula_dt = 1;
-    }
-    epwm1_set_dt(dt);
+
+    interruptionEpwm = 1;
+
+    ctrl_loop();
 
     EPwm1Regs.ETCLR.bit.INT = 1;
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;
+    //PieCtrlRegs.PIEACK.bit.ACK3 = 1;
 }

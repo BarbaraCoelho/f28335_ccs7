@@ -9,9 +9,11 @@
 #ifndef MY_XINT_C_
 #define MY_XINT_C_
 
-#include "DSP28x_Project.h"
+#include "main.h"
 
-extern volatile Uint32 index_sinal_modulante;
+#define sinc1 GpioDataRegs.GPBDAT.bit.GPIO33
+#define sinc2 GpioDataRegs.GPADAT.bit.GPIO31
+#define sinc3 GpioDataRegs.GPADAT.bit.GPIO29
 
 void my_xint_init(void);
 

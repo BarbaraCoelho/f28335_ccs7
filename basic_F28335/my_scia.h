@@ -13,7 +13,7 @@
 #ifndef MY_SCIA_H_
 #define MY_SCIA_H_
 
-#include "DSP28x_Project.h"
+#include "main.h"
 
 #define my_scia_send_char(c) SciaRegs.SCITXBUF = (c)
 #define my_scia_txempty SciaRegs.SCICTL2.bit.TXEMPTY

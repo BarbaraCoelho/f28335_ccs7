@@ -27,11 +27,11 @@ ORDERED_OBJS += \
 "./main.obj" \
 "./my_adc.obj" \
 "./my_buttons.obj" \
+"./my_ctrl.obj" \
 "./my_epwm.obj" \
 "./my_leds.obj" \
 "./my_machine.obj" \
 "./my_scia.obj" \
-"./my_sinc.obj" \
 "./my_xint.obj" \
 "../DSP2833x_Headers_nonBIOS.cmd" \
 "../F28335.cmd" \
@@ -164,7 +164,7 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 basic_F28335.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C2000 Linker'
-	"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O3 --opt_for_speed=5 --advice:performance=all -g --diag_suppress=10063 --diag_warning=225 --diag_wrap=off --display_error_number -z -m"basic_F28335.map" --stack_size=0x300 --warn_sections -i"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/lib" -i"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/include" -i"C:/Users/BARBARA/Documents/GitHub/f28335_ccs7/f2833x/v142/DSP2833x_common/cmd" -i"C:/Users/BARBARA/Documents/GitHub/f28335_ccs7/f2833x/v142/DSP2833x_headers/cmd" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="basic_F28335_linkInfo.xml" --entry_point=code_start --rom_model -o "basic_F28335.out" $(ORDERED_OBJS)
+	"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/bin/cl2000" -v28 -ml -mt --float_support=fpu32 -O4 --opt_for_speed=5 --advice:performance=all -g --diag_suppress=10063 --diag_warning=225 --diag_wrap=off --display_error_number -z -m"basic_F28335.map" --stack_size=0x300 --warn_sections -i"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/lib" -i"D:/ti/ccsv7/tools/compiler/ti-cgt-c2000_16.9.4.LTS/include" -i"C:/Users/BARBARA/Documents/GitHub/f28335_ccs7_TesteMalhaCorrente/f2833x/v142/DSP2833x_common/cmd" -i"C:/Users/BARBARA/Documents/GitHub/f28335_ccs7_TesteMalhaCorrente/f2833x/v142/DSP2833x_headers/cmd" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="basic_F28335_linkInfo.xml" --entry_point=code_start --rom_model -o "basic_F28335.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -177,8 +177,8 @@ basic_F28335.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "DSP2833x_ADC_cal.obj" "DSP2833x_Adc.obj" "DSP2833x_CodeStartBranch.obj" "DSP2833x_CpuTimers.obj" "DSP2833x_DefaultIsr.obj" "DSP2833x_EPwm.obj" "DSP2833x_GlobalVariableDefs.obj" "DSP2833x_Gpio.obj" "DSP2833x_PieCtrl.obj" "DSP2833x_PieVect.obj" "DSP2833x_Sci.obj" "DSP2833x_SysCtrl.obj" "DSP2833x_Xintf.obj" "DSP2833x_usDelay.obj" "main.obj" "my_adc.obj" "my_buttons.obj" "my_epwm.obj" "my_leds.obj" "my_machine.obj" "my_scia.obj" "my_sinc.obj" "my_xint.obj" 
-	-$(RM) "DSP2833x_Adc.d" "DSP2833x_CpuTimers.d" "DSP2833x_DefaultIsr.d" "DSP2833x_EPwm.d" "DSP2833x_GlobalVariableDefs.d" "DSP2833x_Gpio.d" "DSP2833x_PieCtrl.d" "DSP2833x_PieVect.d" "DSP2833x_Sci.d" "DSP2833x_SysCtrl.d" "DSP2833x_Xintf.d" "main.d" "my_adc.d" "my_buttons.d" "my_epwm.d" "my_leds.d" "my_machine.d" "my_scia.d" "my_sinc.d" "my_xint.d" 
+	-$(RM) "DSP2833x_ADC_cal.obj" "DSP2833x_Adc.obj" "DSP2833x_CodeStartBranch.obj" "DSP2833x_CpuTimers.obj" "DSP2833x_DefaultIsr.obj" "DSP2833x_EPwm.obj" "DSP2833x_GlobalVariableDefs.obj" "DSP2833x_Gpio.obj" "DSP2833x_PieCtrl.obj" "DSP2833x_PieVect.obj" "DSP2833x_Sci.obj" "DSP2833x_SysCtrl.obj" "DSP2833x_Xintf.obj" "DSP2833x_usDelay.obj" "main.obj" "my_adc.obj" "my_buttons.obj" "my_ctrl.obj" "my_epwm.obj" "my_leds.obj" "my_machine.obj" "my_scia.obj" "my_xint.obj" 
+	-$(RM) "DSP2833x_Adc.d" "DSP2833x_CpuTimers.d" "DSP2833x_DefaultIsr.d" "DSP2833x_EPwm.d" "DSP2833x_GlobalVariableDefs.d" "DSP2833x_Gpio.d" "DSP2833x_PieCtrl.d" "DSP2833x_PieVect.d" "DSP2833x_Sci.d" "DSP2833x_SysCtrl.d" "DSP2833x_Xintf.d" "main.d" "my_adc.d" "my_buttons.d" "my_ctrl.d" "my_epwm.d" "my_leds.d" "my_machine.d" "my_scia.d" "my_xint.d" 
 	-$(RM) "DSP2833x_ADC_cal.d" "DSP2833x_CodeStartBranch.d" "DSP2833x_usDelay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
